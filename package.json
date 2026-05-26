@@ -1,15 +1,23 @@
 {
-    "name": "selfhostchat",
-    "version": "1.0.0",
-    "volta": {
-        "node": "25.0.0",
-        "pnpm": "11.3.0"
-    },
-    "scripts": {
-        "setup": "node scripts/setup-env.js",
-        "prepare": "pnpm run setup"
-    },
-    "devDependencies": {
-        "turbo": "^2.9.14"
-    }
+  "name": "selfhostchat",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.3.0",
+  "scripts": {
+    "setup": "node scripts/setup-env.js",
+    "prepare": "pnpm run setup",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "dev:api": "dotenv -e .env -- pnpm --filter @selfhostchat/api dev",
+    "dev:ws": "dotenv -e .env -- pnpm --filter @selfhostchat/ws dev",
+    "dev:worker": "pnpm --filter @selfhostchat/worker dev",
+    "dev:all": "turbo run dev --filter=@selfhostchat/api --filter=@selfhostchat/ws --filter=@selfhostchat/worker"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^11.0.0",
+    "turbo": "^2.9.14",
+    "typescript": "^5.4.0"
+  }
 }
