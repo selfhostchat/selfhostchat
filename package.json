@@ -1,7 +1,13 @@
 {
+    "name": "selfhostchat",
+    "version": "1.0.0",
     "volta": {
         "node": "25.0.0",
         "pnpm": "11.3.0"
+    },
+    "scripts": {
+        "setup": "node scripts/setup-env.js",
+        "prepare": "pnpm run setup"
     },
     "devDependencies": {
         "turbo": "^2.9.14"
