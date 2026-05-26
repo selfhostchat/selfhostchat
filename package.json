@@ -1,0 +1,9 @@
+{
+    "volta": {
+        "node": "25.0.0",
+        "pnpm": "11.3.0"
+    },
+    "devDependencies": {
+        "turbo": "^2.9.14"
+    }
+}
