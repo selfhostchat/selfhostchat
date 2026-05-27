@@ -1,0 +1,9 @@
+{
+  "system": {
+    "invalidCredentials": "Tài khoản hoặc mật khẩu không đúng",
+    "failedToSetup": "Thiết lập thất bại. Vui lòng thử lại.",
+    "adminUsernameExists": "Tên người dùng admin đã tồn tại",
+    "serverError": "Lỗi máy chủ. Vui lòng thử lại sau.",
+    "networkError": "Lỗi mạng. Vui lòng kiểm tra kết nối."
+  }
+}

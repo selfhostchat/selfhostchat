@@ -1,0 +1,25 @@
+{
+  "name": "@selfhostchat/web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "axios": "^1.16.1",
+    "dayjs": "^1.11.21",
+    "tailwindcss": "^4.3.0",
+    "vue": "^3.5.34",
+    "vue-i18n": "^11.4.4",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "daisyui": "^5.5.20",
+    "vite": "^8.0.12"
+  }
+}
