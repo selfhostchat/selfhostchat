@@ -16,6 +16,8 @@ onMounted(() => {
     i18n.global.locale.value = savedLocale
   }
 })
+
+
 </script>
 
 <template>
