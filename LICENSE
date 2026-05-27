@@ -1,0 +1,42 @@
+GNU General Public License v3 (GPL v3) with SelfHostChat Commercial Exception
+
+Copyright (c) 2025-2026 SelfHostChat Contributors
+https://github.com/selfhostchat/selfhostchat
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU GPL v3 as published by the Free Software
+Foundation.
+
+The full GPL v3 license is available at:
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+--------------------------------------------------------------------------------
+
+COMMERCIAL USE EXCEPTION
+
+In addition to GPL v3 permissions, the following exception applies:
+
+PERMITTED (without commercial license):
+  - Learning, research, personal use, and evaluation
+  - Forking and modifying the source code
+  - Self-hosting in Docker, VM, or bare metal for internal use
+  - Organizations with fewer than 200 full-time employees
+
+REQUIRED:
+  - Keep original copyright and attribution notices
+  - Display "Powered by SelfHostChat" with link to the repository
+  - For modified versions, clearly indicate modifications made
+
+PROHIBITED:
+  - Removing or obscuring SelfHostChat branding and logos
+  - Presenting the software as your own proprietary product
+  - Selling, licensing, or sublicensing the software
+  - Offering the software as a hosted/SaaS service to third parties
+  - Using the software to provide commercial services to external clients
+
+Organizations with 200+ employees or commercial use cases not listed above
+must obtain a valid commercial license before production use.
+
+See GPL v3 Section 11 for full disclaimer details.
+
+For commercial licensing, please contact via the project homepage.
