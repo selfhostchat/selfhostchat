@@ -2,7 +2,6 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 import { Scalar } from '@scalar/hono-api-reference';
 import { createMarkdownFromOpenApi } from '@scalar/openapi-to-markdown'
 
-
 // Docs: https://hono.dev/examples/scalar
 export async function registerReference(app: OpenAPIHono) {
   const contentDocument = app.getOpenAPI31Document({

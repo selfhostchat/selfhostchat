@@ -60,6 +60,9 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
+      dayjs:
+        specifier: ^1.11.21
+        version: 1.11.21
       dotenv:
         specifier: ^16.4.0
         version: 16.6.1
@@ -860,6 +863,9 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  dayjs@1.11.21:
+    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
 
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -2476,6 +2482,8 @@ snapshots:
       clsx: 2.1.1
     optionalDependencies:
       typescript: 5.9.3
+
+  dayjs@1.11.21: {}
 
   debug@4.4.3:
     dependencies:

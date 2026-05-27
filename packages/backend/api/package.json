@@ -18,6 +18,7 @@
     "@selfhostchat/types": "workspace:*",
     "@selfhostchat/validators": "workspace:*",
     "bcryptjs": "^2.4.3",
+    "dayjs": "^1.11.21",
     "dotenv": "^16.4.0",
     "hono": "^4.0.0",
     "ioredis": "^5.3.0",
