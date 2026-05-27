@@ -11,6 +11,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "dev:api": "dotenv -f .env -- pnpm --filter @selfhostchat/api dev",
+    "dev:web": "dotenv -f .env -- pnpm --filter @selfhostchat/web dev",
     "dev:ws": "dotenv -f .env -- pnpm --filter @selfhostchat/ws dev",
     "dev:worker": "pnpm --filter @selfhostchat/worker dev",
     "dev:all": "turbo run dev --filter=@selfhostchat/api --filter=@selfhostchat/ws --filter=@selfhostchat/worker"
