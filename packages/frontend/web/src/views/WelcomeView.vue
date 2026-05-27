@@ -1,154 +1,3 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import axios from 'axios'
-import { usePageTranslation } from '../composables/usePageTranslation'
-import { i18n } from '../i18n/index.js'
-
-const { locale } = useI18n()
-const router = useRouter()
-const isDark = ref(true)
-
-const switchLocale = (lang: 'en' | 'vi') => {
-  i18n.global.locale.value = lang
-  localStorage.setItem('locale', lang)
-}
-
-const messages = {
-  en: {
-    title: 'Welcome to SelfHostChat',
-    subtitle: 'Your self-hosted communication platform',
-    step1Title: "Let's get started",
-    step1Subtitle: 'Enter your workspace details',
-    workspaceName: 'Business / Workspace Name',
-    workspaceNamePlaceholder: 'My Company',
-    workspaceNameError: 'Please enter your business name',
-    continue: 'Continue',
-    step2Title: 'Create Admin Account',
-    step2Subtitle: 'Set up your root administrator',
-    usernameLabel: 'Username',
-    usernameHint: 'Default: root - cannot be changed',
-    passwordLabel: 'Password',
-    passwordPlaceholder: 'Enter password (min 6 chars)',
-    passwordError: 'Please enter your password',
-    passwordMinError: 'Password must be at least 6 characters',
-    createWorkspace: 'Create Workspace',
-    back: 'Back',
-    footer: 'SelfHostChat v1.0 • Self-hosted communication',
-    adminUsernameExists: 'Admin username already exists',
-    failedToSetup: 'Failed to setup. Please try again.',
-  },
-  vi: {
-    title: 'Chào mừng đến SelfHostChat',
-    subtitle: 'Nền tảng giao tiếp tự lưu trữ',
-    step1Title: 'Bắt đầu ngay',
-    step1Subtitle: 'Nhập thông tin workspace của bạn',
-    workspaceName: 'Tên doanh nghiệp / Workspace',
-    workspaceNamePlaceholder: 'Công ty của tôi',
-    workspaceNameError: 'Vui lòng nhập tên doanh nghiệp',
-    continue: 'Tiếp tục',
-    step2Title: 'Tạo tài khoản Admin',
-    step2Subtitle: 'Thiết lập quản trị viên root',
-    usernameLabel: 'Tên đăng nhập',
-    usernameHint: 'Mặc định: root - không thể thay đổi',
-    passwordLabel: 'Mật khẩu',
-    passwordPlaceholder: 'Nhập mật khẩu (tối thiểu 6 ký tự)',
-    passwordError: 'Vui lòng nhập mật khẩu',
-    passwordMinError: 'Mật khẩu phải có ít nhất 6 ký tự',
-    createWorkspace: 'Tạo Workspace',
-    back: 'Quay lại',
-    footer: 'SelfHostChat v1.0 • Tự chủ hoàn toàn',
-    adminUsernameExists: 'Tên người dùng admin đã tồn tại',
-    failedToSetup: 'Thiết lập thất bại. Vui lòng thử lại.',
-  },
-}
-
-const { tx } = usePageTranslation(messages)
-
-const businessName = ref('')
-const username = ref('root')
-const password = ref('')
-const showPassword = ref(false)
-const isLoading = ref(false)
-const error = ref('')
-const step = ref(1)
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1'
-
-onMounted(async () => {
-  const saved = localStorage.getItem('theme')
-  if (saved) {
-    isDark.value = saved === 'dark'
-  }
-  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
-
-  try {
-    const res = await axios.get(`${API_URL}/config/status`)
-    if (res.data.configured) {
-      router.push('/login')
-    }
-  } catch {
-  }
-})
-
-const toggleTheme = () => {
-  isDark.value = !isDark.value
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
-  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
-}
-
-const nextStep = () => {
-  error.value = ''
-  if (step.value === 1 && !businessName.value.trim()) {
-    error.value = tx('workspaceNameError')
-    return
-  }
-  if (step.value === 1) {
-    step.value = 2
-    return
-  }
-  if (step.value === 2 && !password.value) {
-    error.value = tx('passwordError')
-    return
-  }
-  if (step.value === 2 && password.value.length < 6) {
-    error.value = tx('passwordMinError')
-    return
-  }
-  setupWorkspace()
-}
-
-const setupWorkspace = async () => {
-  isLoading.value = true
-  error.value = ''
-
-  try {
-    const res = await axios.post(`${API_URL}/config/setup`, {
-      organizationName: businessName.value,
-      adminUsername: username.value,
-      adminPassword: password.value,
-    })
-
-    localStorage.setItem('workspace', JSON.stringify({
-      name: res.data.data.organizationName,
-      workspaceId: res.data.data.workspaceId,
-      username: username.value,
-      createdAt: new Date().toISOString(),
-    }))
-
-    router.push('/dashboard')
-  } catch (err: any) {
-    if (err.response?.status === 409) {
-      error.value = tx('adminUsernameExists')
-    } else {
-      error.value = err.response?.data?.error || tx('failedToSetup')
-    }
-    isLoading.value = false
-  }
-}
-</script>
-
 <template>
   <div class="min-h-screen bg-base-100 flex items-center justify-center p-4">
     <!-- Theme toggle & Language switcher -->
@@ -311,3 +160,154 @@ const setupWorkspace = async () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import axios from 'axios'
+import { usePageTranslation } from '../composables/usePageTranslation'
+import { i18n } from '../i18n/index.js'
+
+const { locale } = useI18n()
+const router = useRouter()
+
+const { tx } = usePageTranslation(() => translator)
+
+const isDark = ref(true)
+const businessName = ref('')
+const username = ref('root')
+const password = ref('')
+const showPassword = ref(false)
+const isLoading = ref(false)
+const error = ref('')
+const step = ref(1)
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1'
+
+onMounted(async () => {
+  const saved = localStorage.getItem('theme')
+  if (saved) {
+    isDark.value = saved === 'dark'
+  }
+  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
+
+  try {
+    const res = await axios.get(`${API_URL}/config/status`)
+    if (res.data.configured) {
+      router.push('/login')
+    }
+  } catch {
+  }
+})
+
+const switchLocale = (lang: 'en' | 'vi') => {
+  i18n.global.locale.value = lang
+  localStorage.setItem('locale', lang)
+}
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
+}
+
+const nextStep = () => {
+  error.value = ''
+  if (step.value === 1 && !businessName.value.trim()) {
+    error.value = tx('workspaceNameError')
+    return
+  }
+  if (step.value === 1) {
+    step.value = 2
+    return
+  }
+  if (step.value === 2 && !password.value) {
+    error.value = tx('passwordError')
+    return
+  }
+  if (step.value === 2 && password.value.length < 6) {
+    error.value = tx('passwordMinError')
+    return
+  }
+  setupWorkspace()
+}
+
+const setupWorkspace = async () => {
+  isLoading.value = true
+  error.value = ''
+
+  try {
+    const res = await axios.post(`${API_URL}/config/setup`, {
+      organizationName: businessName.value,
+      adminUsername: username.value,
+      adminPassword: password.value,
+    })
+
+    localStorage.setItem('workspace', JSON.stringify({
+      name: res.data.data.organizationName,
+      workspaceId: res.data.data.workspaceId,
+      username: username.value,
+      createdAt: new Date().toISOString(),
+    }))
+
+    router.push('/dashboard')
+  } catch (err: any) {
+    if (err.response?.status === 409) {
+      error.value = tx('adminUsernameExists')
+    } else {
+      error.value = err.response?.data?.error || tx('failedToSetup')
+    }
+    isLoading.value = false
+  }
+}
+
+const translator = {
+  en: {
+    title: 'Welcome to SelfHostChat',
+    subtitle: 'Your self-hosted communication platform',
+    step1Title: "Let's get started",
+    step1Subtitle: 'Enter your workspace details',
+    workspaceName: 'Business / Workspace Name',
+    workspaceNamePlaceholder: 'My Company',
+    workspaceNameError: 'Please enter your business name',
+    continue: 'Continue',
+    step2Title: 'Create Admin Account',
+    step2Subtitle: 'Set up your root administrator',
+    usernameLabel: 'Username',
+    usernameHint: 'Default: root - cannot be changed',
+    passwordLabel: 'Password',
+    passwordPlaceholder: 'Enter password (min 6 chars)',
+    passwordError: 'Please enter your password',
+    passwordMinError: 'Password must be at least 6 characters',
+    createWorkspace: 'Create Workspace',
+    back: 'Back',
+    footer: 'SelfHostChat v1.0 • Self-hosted communication',
+    adminUsernameExists: 'Admin username already exists',
+    failedToSetup: 'Failed to setup. Please try again.',
+  },
+  vi: {
+    title: 'Chào mừng đến SelfHostChat',
+    subtitle: 'Nền tảng giao tiếp tự lưu trữ',
+    step1Title: 'Bắt đầu ngay',
+    step1Subtitle: 'Nhập thông tin workspace của bạn',
+    workspaceName: 'Tên doanh nghiệp / Workspace',
+    workspaceNamePlaceholder: 'Công ty của tôi',
+    workspaceNameError: 'Vui lòng nhập tên doanh nghiệp',
+    continue: 'Tiếp tục',
+    step2Title: 'Tạo tài khoản Admin',
+    step2Subtitle: 'Thiết lập quản trị viên root',
+    usernameLabel: 'Tên đăng nhập',
+    usernameHint: 'Mặc định: root - không thể thay đổi',
+    passwordLabel: 'Mật khẩu',
+    passwordPlaceholder: 'Nhập mật khẩu (tối thiểu 6 ký tự)',
+    passwordError: 'Vui lòng nhập mật khẩu',
+    passwordMinError: 'Mật khẩu phải có ít nhất 6 ký tự',
+    createWorkspace: 'Tạo Workspace',
+    back: 'Quay lại',
+    footer: 'SelfHostChat v1.0 • Tự chủ hoàn toàn',
+    adminUsernameExists: 'Tên người dùng admin đã tồn tại',
+    failedToSetup: 'Thiết lập thất bại. Vui lòng thử lại.',
+  },
+}
+</script>
