@@ -19,6 +19,11 @@ const LoginSchema = z.object({
   password: z.string().min(6),
 }).openapi('LoginRequest');
 
+const LoginByUsernameSchema = z.object({
+  username: z.string().min(1),
+  password: z.string().min(6),
+}).openapi('LoginByUsernameRequest');
+
 const UserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
@@ -156,6 +161,72 @@ auth.openapi(
     const valid = await bcrypt.compare(body.password, user.passwordHash);
     if (!valid) {
       return c.json({ error: 'Invalid email or password' }, 401);
+    }
+    const token = generateToken(user._id.toString(), user.email);
+    return c.json({
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+      },
+      token,
+    });
+  }
+);
+
+// POST /auth/login/username
+auth.openapi(
+  createRoute({
+    method: 'post',
+    path: '/login/username',
+    tags: ['Auth'],
+    summary: 'Login by username',
+    description: 'Authenticate user by username and return JWT token',
+    security: [],
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: LoginByUsernameSchema,
+          },
+        },
+        required: true,
+      },
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: LoginResponseSchema,
+          },
+        },
+        description: 'Login successful',
+      },
+      401: {
+        content: { 'application/json': { schema: ErrorSchema } },
+        description: 'Invalid username or password',
+      },
+      400: {
+        content: { 'application/json': { schema: ErrorSchema } },
+        description: 'Invalid input',
+      },
+    },
+  }),
+  async (c) => {
+    const body = c.req.valid('json');
+    const { Config } = await import('../models/config.model.js');
+    const config = await Config.findOne({ adminUsername: body.username.toLowerCase() }).lean();
+    if (!config) {
+      return c.json({ error: 'Invalid username or password' }, 401);
+    }
+    const valid = await bcrypt.compare(body.password, config.adminPasswordHash);
+    if (!valid) {
+      return c.json({ error: 'Invalid username or password' }, 401);
+    }
+    const user = await User.findById(config.workspaceId).lean();
+    if (!user) {
+      return c.json({ error: 'Invalid username or password' }, 401);
     }
     const token = generateToken(user._id.toString(), user.email);
     return c.json({

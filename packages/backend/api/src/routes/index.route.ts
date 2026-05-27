@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import authRoute from './auth.route.js';
+import configRoute from './config.route.js';
 import usersRoute from './users.route.js';
 import workspacesRoute from './workspaces.route.js';
 import channelsRoute from './channels.route.js';
@@ -9,6 +10,7 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 
 export function registerRouters(app: OpenAPIHono) {
   app.route('/api/v1/auth', authRoute);
+  app.route('/api/v1/config', configRoute);
 
   app.use('/api/v1/*', authMiddleware);
 

@@ -1,0 +1,9 @@
+{
+  "system": {
+    "invalidCredentials": "Invalid credentials",
+    "failedToSetup": "Failed to setup. Please try again.",
+    "adminUsernameExists": "Admin username already exists",
+    "serverError": "Server error. Please try again later.",
+    "networkError": "Network error. Please check your connection."
+  }
+}
