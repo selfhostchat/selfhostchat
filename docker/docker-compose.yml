@@ -1,0 +1,38 @@
+
+include:
+  - path: docker-compose.base.yml
+    project_directory: docker
+
+name: hostchatlive
+
+services:
+  api:
+    container_name: api-backend
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "3000:3000"
+    environment:
+      MONGODB_URI: ${MONGODB_URI}    
+    networks:
+      - hostchatnetwork
+
+  web:  
+    container_name: web-frontend  
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+    ports:
+      - "${WEB_PORT}:80"
+    networks:
+      - hostchatnetwork
+    depends_on:
+      - api      
+        
+
+networks:
+  hostchatnetwork:
+    driver: bridge
+
+

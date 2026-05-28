@@ -10,21 +10,29 @@ let connection: typeof mongoose | null = null;
 export async function connectDB(): Promise<typeof mongoose> {
   if (connection) return connection;
 
-  try {
-    connection = await mongoose.connect(MONGODB_URI, {
-      // Mongoose connection options
-      maxPoolSize: 10,
-      minPoolSize: 2,
-      serverSelectionTimeoutMS: 5000,
-    });
-    console.log('✅ MongoDB connected');
+  mongoose.connection.on('disconnected', () => {
+    console.warn('⚠️ MongoDB disconnected, waiting for reconnect...');
+    connection = null;
+  });
 
+  mongoose.connection.on('reconnected', () => {
+    console.log('✅ MongoDB reconnected');
+  });
 
-    return connection;
-  } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
-    throw error;
-  }
+  mongoose.connection.on('error', (err) => {
+    console.error('❌ MongoDB error:', err);
+  });
+
+  connection = await mongoose.connect(MONGODB_URI, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+  });
+
+  console.log('✅ MongoDB connected');
+  return connection;
 }
 
 export async function disconnectDB(): Promise<void> {

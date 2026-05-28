@@ -1,0 +1,31 @@
+
+include:
+  - path: docker-compose.base.yml
+    project_directory: docker
+
+name: hostchatdev 
+
+
+# Overight port config
+services:
+  mongodb:
+    container_name: mongodb-dev
+    ports:
+      - '${MONGODB_PORT}:27017'
+
+  redis:
+    container_name: redis-dev
+    ports:
+      - '${REDIS_PORT}:6379'
+
+  rabbitmq:
+    container_name: rabbitmq-dev
+    ports:
+      - '${RABBITMQ_PORT}:5672'
+      - '${RABBITMQ_MANAGEMENT_PORT}:15672'
+
+  minio:
+    container_name: minio-dev
+    ports:
+      - '${MINIO_PORT}:9000'
+      - '${MINIO_CONSOLE_PORT}:9001'

@@ -4,7 +4,8 @@
   "private": true,
   "packageManager": "pnpm@11.3.0",
   "scripts": {
-    "setup": "node scripts/setup-env.js",
+    "setup": "node scripts/setup-env.js --mode root",
+    "setup:docker": "node scripts/setup-env.js --mode docker",
     "prepare": "pnpm run setup",
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -13,7 +14,10 @@
     "dev:api": "dotenv -f .env -- pnpm --filter @selfhostchat/api dev",
     "dev:web": "dotenv -f .env -- pnpm --filter @selfhostchat/web dev",
     "dev:ws": "dotenv -f .env -- pnpm --filter @selfhostchat/ws dev",
-    "dev:worker": "pnpm --filter @selfhostchat/worker dev"
+    "dev:worker": "pnpm --filter @selfhostchat/worker dev",
+    "build:api": "pnpm --filter @selfhostchat/api build",
+    "build:web": "pnpm --filter @selfhostchat/web build",
+    "docker:up": "pnpm setup:docker && docker-compose -f docker/docker-compose.yml --env-file docker/.env.docker down -v && docker-compose -f docker/docker-compose.yml --env-file docker/.env.docker up -d"
   },
   "devDependencies": {
     "dotenv-cli": "^11.0.0",

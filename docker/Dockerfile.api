@@ -1,0 +1,12 @@
+FROM node:25-alpine
+RUN npm install -g pnpm tsx
+
+WORKDIR /app
+COPY . .
+
+ENV CI=true
+RUN pnpm install --frozen-lockfile
+
+EXPOSE 3000
+
+CMD ["tsx", "packages/backend/api/src/server.ts"]

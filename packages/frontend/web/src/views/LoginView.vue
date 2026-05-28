@@ -1,103 +1,3 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import axios from 'axios'
-import { usePageTranslation } from '../composables/usePageTranslation'
-import { i18n } from '../i18n/index.js'
-
-const { locale } = useI18n()
-const router = useRouter()
-const isDark = ref(true)
-
-const switchLocale = (lang: 'en' | 'vi') => {
-  i18n.global.locale.value = lang
-  localStorage.setItem('locale', lang)
-}
-
-const messages = {
-  en: {
-    title: 'Sign in',
-    subtitle: 'Access your workspace',
-    username: 'Username',
-    usernamePlaceholder: 'Enter your username',
-    password: 'Password',
-    passwordPlaceholder: 'Enter your password',
-    submit: 'Sign in',
-    footer: 'SelfHostChat v1.0 • Self-hosted communication',
-    usernameError: 'Please enter your username',
-    passwordError: 'Please enter your password',
-    invalidCredentials: 'Invalid credentials',
-  },
-  vi: {
-    title: 'Đăng nhập',
-    subtitle: 'Truy cập workspace của bạn',
-    username: 'Tên đăng nhập',
-    usernamePlaceholder: 'Nhập tên đăng nhập',
-    password: 'Mật khẩu',
-    passwordPlaceholder: 'Nhập mật khẩu',
-    submit: 'Đăng nhập',
-    footer: 'SelfHostChat v1.0 • Tự chủ hoàn toàn',
-    usernameError: 'Vui lòng nhập tên đăng nhập',
-    passwordError: 'Vui lòng nhập mật khẩu',
-    invalidCredentials: 'Tài khoản hoặc mật khẩu không đúng',
-  },
-}
-
-const { tx } = usePageTranslation(messages)
-
-const username = ref('')
-const password = ref('')
-const showPassword = ref(false)
-const isLoading = ref(false)
-const error = ref('')
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1'
-
-onMounted(() => {
-  const saved = localStorage.getItem('theme')
-  if (saved) {
-    isDark.value = saved === 'dark'
-  }
-  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
-})
-
-const toggleTheme = () => {
-  isDark.value = !isDark.value
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
-  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
-}
-
-const handleLogin = async () => {
-  error.value = ''
-
-  if (!username.value.trim()) {
-    error.value = tx('usernameError')
-    return
-  }
-  if (!password.value) {
-    error.value = tx('passwordError')
-    return
-  }
-
-  isLoading.value = true
-
-  try {
-    const res = await axios.post(`${API_URL}/auth/login/username`, {
-      username: username.value,
-      password: password.value,
-    })
-
-    localStorage.setItem('token', res.data.token)
-
-    router.push('/dashboard')
-  } catch (err: any) {
-    error.value = err.response?.data?.error || tx('invalidCredentials')
-    isLoading.value = false
-  }
-}
-</script>
-
 <template>
   <div class="min-h-screen bg-base-100 flex items-center justify-center p-4">
     <!-- Theme toggle & Language switcher -->
@@ -206,3 +106,103 @@ const handleLogin = async () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import axios from 'axios'
+import { usePageTranslation } from '../composables/usePageTranslation'
+import { i18n } from '../i18n/index.js'
+
+const { locale } = useI18n()
+const router = useRouter()
+
+const { tx } = usePageTranslation(() => translator)
+
+const isDark = ref(true)
+const username = ref('')
+const password = ref('')
+const showPassword = ref(false)
+const isLoading = ref(false)
+const error = ref('')
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1'
+
+onMounted(() => {
+  const saved = localStorage.getItem('theme')
+  if (saved) {
+    isDark.value = saved === 'dark'
+  }
+  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
+})
+
+const switchLocale = (lang: 'en' | 'vi') => {
+  i18n.global.locale.value = lang
+  localStorage.setItem('locale', lang)
+}
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  document.documentElement.setAttribute('data-theme', isDark.value ? 'selfhost-dark' : 'selfhost-light')
+}
+
+const handleLogin = async () => {
+  error.value = ''
+
+  if (!username.value.trim()) {
+    error.value = tx('usernameError')
+    return
+  }
+  if (!password.value) {
+    error.value = tx('passwordError')
+    return
+  }
+
+  isLoading.value = true
+
+  try {
+    const res = await axios.post(`${API_URL}/auth/login/username`, {
+      username: username.value,
+      password: password.value,
+    })
+
+    localStorage.setItem('token', res.data.token)
+
+    router.push('/dashboard')
+  } catch (err: any) {
+    error.value = err.response?.data?.error || tx('invalidCredentials')
+    isLoading.value = false
+  }
+}
+
+const translator = {
+  en: {
+    title: 'Sign in',
+    subtitle: 'Access your workspace',
+    username: 'Username',
+    usernamePlaceholder: 'Enter your username',
+    password: 'Password',
+    passwordPlaceholder: 'Enter your password',
+    submit: 'Sign in',
+    footer: 'SelfHostChat v1.0 • Self-hosted communication',
+    usernameError: 'Please enter your username',
+    passwordError: 'Please enter your password',
+    invalidCredentials: 'Invalid credentials',
+  },
+  vi: {
+    title: 'Đăng nhập',
+    subtitle: 'Truy cập workspace của bạn',
+    username: 'Tên đăng nhập',
+    usernamePlaceholder: 'Nhập tên đăng nhập',
+    password: 'Mật khẩu',
+    passwordPlaceholder: 'Nhập mật khẩu',
+    submit: 'Đăng nhập',
+    footer: 'SelfHostChat v1.0 • Tự chủ hoàn toàn',
+    usernameError: 'Vui lòng nhập tên đăng nhập',
+    passwordError: 'Vui lòng nhập mật khẩu',
+    invalidCredentials: 'Tài khoản hoặc mật khẩu không đúng',
+  },
+}
+</script>

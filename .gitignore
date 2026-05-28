@@ -20,6 +20,7 @@ pnpm-debug.log*
 .env.*.local
 .env.production
 .env.example
+*.env.*
 
 # IDE
 .idea/
