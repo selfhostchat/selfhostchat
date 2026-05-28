@@ -14,4 +14,4 @@ mongosh ${MONGO_DATABASE_NAME} \
   --authenticationDatabase ${MONGO_DATABASE_NAME} \
   --eval "db.initCollection.insertOne({_id: 'init', createdAt: new Date()})"
 
-echo "==> MongoDB init complete."
+echo "==> MongoDB init done."

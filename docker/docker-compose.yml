@@ -1,0 +1,31 @@
+
+include:
+  - path: docker-compose.base.yml
+    project_directory: docker
+
+name: hostchatlive
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "3000:3000"
+
+    environment:
+      MONGODB_URI: ${MONGODB_URI}    
+    networks:
+      - hostchatnetwork
+    # depends_on:
+    #   - mongodb
+    #   - redis
+    #   - rabbitmq
+    #   - minio
+        
+
+networks:
+  hostchatnetwork:
+    driver: bridge
+
+
