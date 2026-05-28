@@ -24,6 +24,7 @@ const rabbitmqPassword = generatePassword(16);
 const mongoDBName = 'selfhostchat';
 const mongodbPassword = generatePassword(16);
 const mongoDBUsername = `user${generateSecret(4)}`;
+const webPort = 33700;
 let mongoDBPort = 33701;
 const redisPort = 33702;
 const rabbitmqPort = 33703;
@@ -34,8 +35,9 @@ const minioConsolePort = 33706;
 const vars = {
   NODE_ENV: 'development',
   PORT: '3000',
+  WEB_PORT: webPort,
   WS_PORT: '3001',
-  
+
   // MongoDB
   MONGO_INITDB_ROOT_USERNAME: `root${generateSecret(4)}`,
   MONGO_INITDB_ROOT_PASSWORD: generatePassword(16),

@@ -15,7 +15,7 @@
     "dev:web": "dotenv -f .env -- pnpm --filter @selfhostchat/web dev",
     "dev:ws": "dotenv -f .env -- pnpm --filter @selfhostchat/ws dev",
     "dev:worker": "pnpm --filter @selfhostchat/worker dev",
-    "docker:up:old": "bash scripts/docker-up.sh",
+    "build:web": "pnpm --filter @selfhostchat/web build",
     "docker:up": "pnpm setup:docker && docker-compose -f docker/docker-compose.yml --env-file docker/.env.docker up -d"
   },
   "devDependencies": {
