@@ -15,8 +15,9 @@
     "dev:web": "dotenv -f .env -- pnpm --filter @selfhostchat/web dev",
     "dev:ws": "dotenv -f .env -- pnpm --filter @selfhostchat/ws dev",
     "dev:worker": "pnpm --filter @selfhostchat/worker dev",
+    "build:api": "pnpm --filter @selfhostchat/api build",
     "build:web": "pnpm --filter @selfhostchat/web build",
-    "docker:up": "pnpm setup:docker && docker-compose -f docker/docker-compose.yml --env-file docker/.env.docker up -d"
+    "docker:up": "pnpm setup:docker && docker-compose -f docker/docker-compose.yml --env-file docker/.env.docker down -v && docker-compose -f docker/docker-compose.yml --env-file docker/.env.docker up -d"
   },
   "devDependencies": {
     "dotenv-cli": "^11.0.0",

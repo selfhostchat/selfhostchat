@@ -28,7 +28,7 @@ services:
     networks:
       - hostchatnetwork
     depends_on:
-          - api      
+      - api      
         
 
 networks:
