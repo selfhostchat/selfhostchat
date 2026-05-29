@@ -102,7 +102,7 @@ export async function addMember(
   inviterId: string,
   email: string,
   role: 'admin' | 'member' | 'guest' = 'member'
-): Promise<IWorkspace | null> {
+) {
   const { Workspace } = await import('../models/workspace.model.js');
   const user = await User.findOne({ email });
 
@@ -113,7 +113,6 @@ export async function addMember(
       _id: workspaceId,
       'members.userId': inviterId,
       'members.role': { $in: ['owner', 'admin'] },
-      'members.userId': { $ne: user._id },
     },
     {
       $push: {

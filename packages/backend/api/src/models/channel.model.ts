@@ -26,9 +26,6 @@ const channelSchema = new Schema<IChannel>(
   { timestamps: true }
 );
 
-channelSchema.index({ workspaceId: 1, type: 1 });
-channelSchema.index({ workspaceId: 1, name: 1 });
-channelSchema.index({ members: 1 });
-channelSchema.index({ lastMessageAt: -1 });
+channelSchema.index({ workspaceId: 1, type: 1, name: 1, members: 1, lastMessageAt: -1 });
 
 export const Channel: Model<IChannel> = mongoose.model<IChannel>('Channel', channelSchema);
